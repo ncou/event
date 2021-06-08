@@ -9,6 +9,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
+//https://github.com/hyperf/hyperf/blob/master/src/event/src/EventDispatcher.php
+
 // TODO : Logger à corriger !!!!
 
 class EventDispatcher implements EventDispatcherInterface
@@ -21,14 +23,21 @@ class EventDispatcher implements EventDispatcherInterface
     /**
      * @var null|StdoutLoggerInterface
      */
-    private $logger;
+    //private $logger;
 
+    // TODO : renommer le paramétre $listeners en $listener au singulier ou alors directement en $provider ou $listenerProvider
+    // TODO : virer le logger et actualiser les tests de ce package !!!
+    /*
     public function __construct(
         ListenerProviderInterface $listeners,
         ?StdoutLoggerInterface $logger = null
     ) {
+        */
+    public function __construct(
+        ListenerProviderInterface $listeners
+    ) {
         $this->listeners = $listeners;
-        $this->logger = $logger;
+        //$this->logger = $logger;
     }
 
     /**
@@ -41,7 +50,7 @@ class EventDispatcher implements EventDispatcherInterface
     {
         foreach ($this->listeners->getListenersForEvent($event) as $listener) {
             $listener($event);
-            $this->dump($listener, $event);
+            //$this->dump($listener, $event);
             if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
                 break;
             }
@@ -53,6 +62,7 @@ class EventDispatcher implements EventDispatcherInterface
      * Dump the debug message if $logger property is provided.
      * @param mixed $listener
      */
+    /*
     private function dump($listener, object $event)
     {
         if (! $this->logger instanceof StdoutLoggerInterface) {
@@ -68,5 +78,5 @@ class EventDispatcher implements EventDispatcherInterface
             $listenerName = get_class($listener);
         }
         $this->logger->debug(sprintf('Event %s handled by %s listener.', $eventName, $listenerName));
-    }
+    }*/
 }

@@ -7,7 +7,7 @@ namespace Chiron\Event;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use SplPriorityQueue;
 
-class ListenerProvider implements ListenerProviderInterface
+final class ListenerProvider implements ListenerProviderInterface
 {
     /**
      * @var ListenerData[]
@@ -30,8 +30,15 @@ class ListenerProvider implements ListenerProviderInterface
         return $queue;
     }
 
-    public function on(string $event, callable $listener, int $priority = 1): void
+    public function add(string $event, callable $listener, int $priority = 1): void
     {
         $this->listeners[] = new ListenerData($event, $listener, $priority);
+    }
+
+    public function attach(ListenerInterface $listener, int $priority = 1): void
+    {
+        foreach ($listener->listen() as $event) {
+            $this->add($event, [$listener, 'process'], $priority);
+        }
     }
 }
