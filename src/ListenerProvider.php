@@ -7,6 +7,7 @@ namespace Chiron\Event;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use SplPriorityQueue;
 
+// TODO : améliorer la PiorityQueue en utilisant un 3eme champ serial
 final class ListenerProvider implements ListenerProviderInterface
 {
     /**
