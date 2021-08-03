@@ -14,17 +14,13 @@ matrix:
         -   php: 7.3
             env: dependencies=lowest
 
-cache:
-    directories:
-        - $HOME/.composer/cache
-
 before_script:
     - composer install -n
     - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
 
 script:
     - composer test-coverage
-    - vendor/bin/phpunit
+    - composer phpstan
 
 after_script:
   # Submit coverage report to codecov.io
