@@ -7,8 +7,9 @@ namespace Chiron\Event\Test\Listener;
 use Chiron\Event\ListenerInterface;
 use Chiron\Event\Test\Event\Beta;
 
-class BetaListener implements ListenerInterface
+final class BetaListener implements ListenerInterface
 {
+    /** @var int */
     public $value = 1;
 
     /**

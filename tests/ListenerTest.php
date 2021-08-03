@@ -4,41 +4,26 @@ declare(strict_types=1);
 
 namespace Chiron\Event\Test;
 
-use Hyperf\Config\Config;
-use Hyperf\Contract\ConfigInterface;
-use Hyperf\Event\Annotation\Listener as ListenerAnnotation;
 use Chiron\Event\EventDispatcher;
 use Chiron\Event\ListenerProvider;
-use Chiron\Event\ListenerProviderFactory;
 use Chiron\Event\Test\Event\Alpha;
-use Chiron\Event\Test\Event\Beta;
 use Chiron\Event\Test\Listener\AlphaListener;
 use Chiron\Event\Test\Listener\BetaListener;
-use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
-use SplPriorityQueue;
 
-/**
- * @internal
- * @covers \Hyperf\Event\Annotation\Listener
- * @covers \Hyperf\Event\EventDispatcher
- * @covers \Hyperf\Event\ListenerProvider
- * @covers \Hyperf\Event\ListenerProviderFactory
- */
 class ListenerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testInvokeListenerProvider()
+    public function testInvokeListenerProvider(): void
     {
         $listenerProvider = new ListenerProvider();
         $this->assertInstanceOf(ListenerProviderInterface::class, $listenerProvider);
     }
 
-    public function testInvokeListenerProviderWithListeners()
+    public function testInvokeListenerProviderWithListeners(): void
     {
         $listenerProvider = new ListenerProvider();
 
@@ -54,7 +39,7 @@ class ListenerTest extends TestCase
         $this->assertEquals($listeners[1], $callable2);
     }
 
-    public function testListenerProcess()
+    public function testListenerProcess(): void
     {
         $listener = new AlphaListener();
 

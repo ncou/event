@@ -7,7 +7,7 @@ namespace Chiron\Event\Test\Event;
 use Chiron\Event\StoppableTrait;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class Alpha implements StoppableEventInterface
+final class Alpha implements StoppableEventInterface
 {
     use StoppableTrait;
 }

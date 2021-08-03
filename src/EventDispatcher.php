@@ -26,7 +26,6 @@ class EventDispatcher implements EventDispatcherInterface
     /** @var ListenerProviderInterface */
     private $provider;
 
-    // TODO : actualiser les tests de ce package !!!
     public function __construct(ListenerProviderInterface $provider)
     {
         $this->provider = $provider;

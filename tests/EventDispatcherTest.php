@@ -4,43 +4,30 @@ declare(strict_types=1);
 
 namespace Chiron\Event\Test;
 
-use Hyperf\Config\Config;
-use Hyperf\Contract\ConfigInterface;
-use Hyperf\Contract\StdoutLoggerInterface;
 use Chiron\Event\EventDispatcher;
-use Chiron\Event\EventDispatcherFactory;
 use Chiron\Event\ListenerProvider;
-use Hyperf\Framework\Logger\StdoutLogger;
 use Chiron\Event\Test\Event\Alpha;
-use Chiron\Event\Test\Event\PriorityEvent;
 use Chiron\Event\Test\Listener\AlphaListener;
 use Chiron\Event\Test\Listener\BetaListener;
-use Chiron\Event\Test\Listener\PriorityListener;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
-use ReflectionClass;
 
 // TODO : utiliser cette classe pour tester notamment le spoofing (je pense que ca permet de vérifier que le Event est immutable !!!) + le test sur le Stoppable est beaucoup mieux fait. : https://github.com/yiisoft/event-dispatcher/blob/41b7ef783a4dc23c71230753726b0c6d3256c615/tests/Dispatcher/DispatcherTest.php
 
-/**
- * @internal
- * @covers \Hyperf\Event\EventDispatcher
- */
 class EventDispatcherTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testInvokeDispatcher()
+    public function testInvokeDispatcher(): void
     {
         $listeners = Mockery::mock(ListenerProviderInterface::class);
         $this->assertInstanceOf(EventDispatcherInterface::class, new EventDispatcher($listeners));
     }
 
-    public function testStoppable()
+    public function testStoppable(): void
     {
         $listeners = new ListenerProvider();
         $listeners->attach(Alpha::class, [$alphaListener = new AlphaListener(), 'process']);

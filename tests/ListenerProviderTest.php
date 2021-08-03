@@ -10,13 +10,9 @@ use Chiron\Event\Test\Event\Beta;
 use Chiron\Event\Test\Listener\AlphaListener;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
 class ListenerProviderTest extends TestCase
 {
-    public function testListenNotExistEvent()
+    public function testListenNotExistEvent(): void
     {
         $provider = new ListenerProvider();
         $provider->attach(Alpha::class, [new AlphaListener(), 'process']);
