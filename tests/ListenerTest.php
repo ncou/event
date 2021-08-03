@@ -44,8 +44,8 @@ class ListenerTest extends TestCase
         $listenerProvider = new ListenerProvider();
         $this->assertInstanceOf(ListenerProviderInterface::class, $listenerProvider);
 
-        $listenerProvider->on(Alpha::class, [new AlphaListener(), 'process']);
-        $listenerProvider->on(Beta::class, [new BetaListener(), 'process']);
+        $listenerProvider->add(Alpha::class, [new AlphaListener(), 'process']);
+        $listenerProvider->add(Beta::class, [new BetaListener(), 'process']);
         $this->assertTrue(is_array($listenerProvider->listeners));
         $this->assertSame(2, count($listenerProvider->listeners));
         $this->assertInstanceOf(SplPriorityQueue::class, $listenerProvider->getListenersForEvent(new Alpha()));
@@ -54,7 +54,7 @@ class ListenerTest extends TestCase
     public function testListenerProcess()
     {
         $listenerProvider = new ListenerProvider();
-        $listenerProvider->on(Alpha::class, [$listener = new AlphaListener(), 'process']);
+        $listenerProvider->add(Alpha::class, [$listener = new AlphaListener(), 'process']);
         $this->assertSame(1, $listener->value);
 
         $dispatcher = new EventDispatcher($listenerProvider);

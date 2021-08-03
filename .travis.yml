@@ -23,4 +23,13 @@ before_script:
     - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
 
 script:
+    - composer test-coverage
     - vendor/bin/phpunit
+
+after_script:
+  # Submit coverage report to codecov.io
+  - bash <(curl -s https://codecov.io/bash)
+
+# Tell Travis CI to monitor only 'master' branch
+branches:
+  only: master

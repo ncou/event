@@ -19,8 +19,8 @@ class ListenerProviderTest extends TestCase
     public function testListenNotExistEvent()
     {
         $provider = new ListenerProvider();
-        $provider->on(Alpha::class, [new AlphaListener(), 'process']);
-        $provider->on('NotExistEvent', [new AlphaListener(), 'process']);
+        $provider->add(Alpha::class, [new AlphaListener(), 'process']);
+        $provider->add('NotExistEvent', [new AlphaListener(), 'process']);
 
         $it = $provider->getListenersForEvent(new Alpha());
         [$class, $method] = $it->current();

@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Chiron\Event;
 
+// TODO : utiliser plutot cette classe et la transformer en trait !!! : https://github.com/yiisoft/event-dispatcher/blob/41b7ef783a4dc23c71230753726b0c6d3256c615/tests/Event/StoppableEvent.php
+
+// TODO : utilité trés limité pour cette classe à voir si on la conserve dans le package !!!!
+
+// TODO : renommer cette classe en EventStoppableTrait pour que ce soit plus claire ????
 trait StoppableTrait
 {
     /**
@@ -28,6 +33,7 @@ trait StoppableTrait
     public function setPropagation(bool $propagation): self
     {
         $this->propagation = $propagation;
+
         return $this;
     }
 }

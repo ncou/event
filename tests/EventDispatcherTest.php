@@ -24,6 +24,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use ReflectionClass;
 
+// TODO : utiliser cette classe pour tester notamment le spoofing (je pense que ca permet de vérifier que le Event est immutable !!!) + le test sur le Stoppable est beaucoup mieux fait. : https://github.com/yiisoft/event-dispatcher/blob/41b7ef783a4dc23c71230753726b0c6d3256c615/tests/Dispatcher/DispatcherTest.php
+
 /**
  * @internal
  * @covers \Hyperf\Event\EventDispatcher
@@ -38,48 +40,27 @@ class EventDispatcherTest extends TestCase
         $this->assertInstanceOf(EventDispatcherInterface::class, new EventDispatcher($listeners));
     }
 
-    public function testInvokeDispatcherWithStdoutLogger()
-    {
-        $listeners = Mockery::mock(ListenerProviderInterface::class);
-        $logger = Mockery::mock(StdoutLoggerInterface::class);
-        $this->assertInstanceOf(EventDispatcherInterface::class, $instance = new EventDispatcher($listeners, $logger));
-        $reflectionClass = new ReflectionClass($instance);
-        $loggerProperty = $reflectionClass->getProperty('logger');
-        $loggerProperty->setAccessible(true);
-        $this->assertInstanceOf(StdoutLoggerInterface::class, $loggerProperty->getValue($instance));
-    }
-
     public function testStoppable()
     {
         $listeners = new ListenerProvider();
-        $listeners->on(Alpha::class, [$alphaListener = new AlphaListener(), 'process']);
-        $listeners->on(Alpha::class, [$betaListener = new BetaListener(), 'process']);
+        $listeners->add(Alpha::class, [$alphaListener = new AlphaListener(), 'process']);
+        $listeners->add(Alpha::class, [$betaListener = new BetaListener(), 'process']);
         $dispatcher = new EventDispatcher($listeners);
         $dispatcher->dispatch((new Alpha())->setPropagation(true));
-        $this->assertSame(2, $alphaListener->value);
+        $this->assertSame(1, $alphaListener->value);
         $this->assertSame(1, $betaListener->value);
-    }
-
-    public function testLoggerDump()
-    {
-        $logger = Mockery::mock(StdoutLoggerInterface::class);
-        $logger->shouldReceive('debug');
-        $listenerProvider = new ListenerProvider();
-        $listenerProvider->on(Alpha::class, [new AlphaListener(), 'process']);
-        $dispatcher = new EventDispatcher($listenerProvider, $logger);
-        $dispatcher->dispatch(new Alpha());
     }
 
     public function testListenersWithPriority()
     {
         PriorityEvent::$result = [];
         $listenerProvider = new ListenerProvider();
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(1), 'process'], 1);
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(2), 'process'], 3);
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(3), 'process'], 2);
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(4), 'process'], 0);
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(5), 'process'], 99);
-        $listenerProvider->on(PriorityEvent::class, [new PriorityListener(6), 'process'], -99);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(1), 'process'], 1);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(2), 'process'], 3);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(3), 'process'], 2);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(4), 'process'], 0);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(5), 'process'], 99);
+        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(6), 'process'], -99);
 
         $dispatcher = new EventDispatcher($listenerProvider);
         $dispatcher->dispatch(new PriorityEvent());

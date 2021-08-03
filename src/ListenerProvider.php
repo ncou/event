@@ -7,13 +7,12 @@ namespace Chiron\Event;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use SplPriorityQueue;
 
-// TODO : améliorer la PiorityQueue en utilisant un 3eme champ serial
+//https://github.com/hyperf/hyperf/blob/master/src/event/src/ListenerProvider.php
+
 final class ListenerProvider implements ListenerProviderInterface
 {
-    /**
-     * @var ListenerData[]
-     */
-    public $listeners = [];
+    /** @var array */
+    private $listeners = [];
 
     /**
      * @param object $event An event for which to return the relevant listeners
@@ -22,24 +21,24 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     public function getListenersForEvent($event): iterable
     {
-        $queue = new SplPriorityQueue();
-        foreach ($this->listeners as $listener) {
-            if ($event instanceof $listener->event) {
-                $queue->insert($listener->listener, $listener->priority);
+        foreach ($this->listeners as $type => $listeners) {
+            if ($event instanceof $type) {
+                yield from $listeners;
             }
         }
-        return $queue;
     }
 
-    public function add(string $event, callable $listener, int $priority = 1): void
-    {
-        $this->listeners[] = new ListenerData($event, $listener, $priority);
-    }
-
-    public function attach(ListenerInterface $listener, int $priority = 1): void
+    // TODO : ajouter 'Listener' dans le nom des méthodes style addListener / attachListener ????
+    public function add(ListenerInterface $listener): void
     {
         foreach ($listener->listen() as $event) {
-            $this->add($event, [$listener, 'process'], $priority);
+            $this->attach($event, [$listener, 'process']);
         }
+    }
+
+    // TODO : ajouter 'Listener' dans le nom des méthodes style addListener / attachListener ????
+    public function attach(string $event, callable $listener): void
+    {
+        $this->listeners[$event][] = $listener;
     }
 }
