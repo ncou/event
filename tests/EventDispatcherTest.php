@@ -43,28 +43,13 @@ class EventDispatcherTest extends TestCase
     public function testStoppable()
     {
         $listeners = new ListenerProvider();
-        $listeners->add(Alpha::class, [$alphaListener = new AlphaListener(), 'process']);
-        $listeners->add(Alpha::class, [$betaListener = new BetaListener(), 'process']);
+        $listeners->attach(Alpha::class, [$alphaListener = new AlphaListener(), 'process']);
+        $listeners->attach(Alpha::class, [$betaListener = new BetaListener(), 'process']);
+
         $dispatcher = new EventDispatcher($listeners);
         $dispatcher->dispatch((new Alpha())->setPropagation(true));
+
         $this->assertSame(1, $alphaListener->value);
         $this->assertSame(1, $betaListener->value);
-    }
-
-    public function testListenersWithPriority()
-    {
-        PriorityEvent::$result = [];
-        $listenerProvider = new ListenerProvider();
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(1), 'process'], 1);
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(2), 'process'], 3);
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(3), 'process'], 2);
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(4), 'process'], 0);
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(5), 'process'], 99);
-        $listenerProvider->add(PriorityEvent::class, [new PriorityListener(6), 'process'], -99);
-
-        $dispatcher = new EventDispatcher($listenerProvider);
-        $dispatcher->dispatch(new PriorityEvent());
-
-        $this->assertSame([5, 2, 3, 1, 4, 6], PriorityEvent::$result);
     }
 }

@@ -36,25 +36,30 @@ class ListenerTest extends TestCase
     {
         $listenerProvider = new ListenerProvider();
         $this->assertInstanceOf(ListenerProviderInterface::class, $listenerProvider);
-        $this->assertTrue(is_array($listenerProvider->listeners));
     }
 
     public function testInvokeListenerProviderWithListeners()
     {
         $listenerProvider = new ListenerProvider();
-        $this->assertInstanceOf(ListenerProviderInterface::class, $listenerProvider);
 
-        $listenerProvider->add(Alpha::class, [new AlphaListener(), 'process']);
-        $listenerProvider->add(Beta::class, [new BetaListener(), 'process']);
-        $this->assertTrue(is_array($listenerProvider->listeners));
-        $this->assertSame(2, count($listenerProvider->listeners));
-        $this->assertInstanceOf(SplPriorityQueue::class, $listenerProvider->getListenersForEvent(new Alpha()));
+        $callable1 = [new AlphaListener(), 'process'];
+        $callable2 = [new BetaListener(), 'process'];
+
+        $listenerProvider->attach(Alpha::class, $callable1);
+        $listenerProvider->attach(Alpha::class, $callable2);
+
+        $listeners = iterator_to_array($listenerProvider->getListenersForEvent(new Alpha()));
+
+        $this->assertEquals($listeners[0], $callable1);
+        $this->assertEquals($listeners[1], $callable2);
     }
 
     public function testListenerProcess()
     {
+        $listener = new AlphaListener();
+
         $listenerProvider = new ListenerProvider();
-        $listenerProvider->add(Alpha::class, [$listener = new AlphaListener(), 'process']);
+        $listenerProvider->add($listener);
         $this->assertSame(1, $listener->value);
 
         $dispatcher = new EventDispatcher($listenerProvider);
