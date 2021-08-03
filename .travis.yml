@@ -19,6 +19,7 @@ matrix:
             env: dependencies=lowest
 
 before_script:
+    - export XDEBUG_MODE=coverage
     - composer install -n
     - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
 
