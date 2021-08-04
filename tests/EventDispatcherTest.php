@@ -34,7 +34,9 @@ class EventDispatcherTest extends TestCase
         $listeners->attach(Alpha::class, [$betaListener = new BetaListener(), 'process']);
 
         $dispatcher = new EventDispatcher($listeners);
-        $dispatcher->dispatch((new Alpha())->setPropagation(true));
+        $event = new Alpha();
+        $event->stopPropagation();
+        $dispatcher->dispatch($event);
 
         $this->assertSame(1, $alphaListener->value);
         $this->assertSame(1, $betaListener->value);

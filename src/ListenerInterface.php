@@ -8,7 +8,7 @@ namespace Chiron\Event;
 interface ListenerInterface
 {
     /**
-     * @return string[] returns the events that you want to listen
+     * @return array<sting> returns the events classname that you want to listen
      */
     public function listen(): array;
 
