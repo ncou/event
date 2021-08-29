@@ -8,6 +8,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
+
 //https://github.com/ventoviro/windwalker-event/blob/master/Dispatcher.php
 
 //https://github.com/symfony/event-dispatcher/blob/5.3/EventDispatcher.php

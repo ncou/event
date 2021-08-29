@@ -7,7 +7,7 @@ namespace Chiron\Event;
 trait StoppableEventTrait
 {
     /** @var bool */
-    protected $propagationStopped = false;
+    protected $stopPropagation = false;
 
     /**
      * Is propagation stopped?
@@ -20,11 +20,11 @@ trait StoppableEventTrait
      */
     public function isPropagationStopped(): bool
     {
-        return $this->propagationStopped;
+        return $this->stopPropagation === true;
     }
 
     public function stopPropagation(): void
     {
-        $this->propagationStopped = true;
+        $this->stopPropagation = true;
     }
 }
