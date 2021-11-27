@@ -9,8 +9,6 @@ use Chiron\Event\ListenerProvider;
 use Chiron\Event\Test\Event\Alpha;
 use Chiron\Event\Test\Listener\AlphaListener;
 use Chiron\Event\Test\Listener\BetaListener;
-use Mockery;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
@@ -19,12 +17,10 @@ use Psr\EventDispatcher\ListenerProviderInterface;
 
 class EventDispatcherTest extends TestCase
 {
-    use MockeryPHPUnitIntegration;
-
     public function testInvokeDispatcher(): void
     {
-        $listeners = Mockery::mock(ListenerProviderInterface::class);
-        $this->assertInstanceOf(EventDispatcherInterface::class, new EventDispatcher($listeners));
+        $listener = $this->createMock(ListenerProviderInterface::class);
+        $this->assertInstanceOf(EventDispatcherInterface::class, new EventDispatcher($listener));
     }
 
     public function testStoppable(): void

@@ -10,6 +10,7 @@ use UnexpectedValueException;
 /**
  * Defines the trait for a EventDispatcher Aware Class.
  */
+// TODO : classe + interface à déplacer dans le package chiron/core ???? + modifier l'exception levée par un ImproperlyConfiguredException !!!
 trait EventDispatcherAwareTrait
 {
     /** @var EventDispatcherInterface */

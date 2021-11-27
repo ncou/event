@@ -9,14 +9,11 @@ use Chiron\Event\ListenerProvider;
 use Chiron\Event\Test\Event\Alpha;
 use Chiron\Event\Test\Listener\AlphaListener;
 use Chiron\Event\Test\Listener\BetaListener;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
 class ListenerTest extends TestCase
 {
-    use MockeryPHPUnitIntegration;
-
     public function testInvokeListenerProvider(): void
     {
         $listenerProvider = new ListenerProvider();
